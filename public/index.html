@@ -8,28 +8,21 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-image: url('grocery-background.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            position: relative;
             min-height: 100vh;
-        }
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.8);
-            z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
         .container {
+            width: 100%;
             max-width: 600px;
-            margin: 0 auto;
-            background-color: rgba(255, 255, 255, 0.9);
+            margin: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -37,8 +30,9 @@
         h1 {
             text-align: center;
             color: #333;
-            font-size: 1.8em; /* מוקטן מעט */
+            font-size: 1.5em;
             margin-bottom: 20px;
+            white-space: nowrap;
         }
         #shopping-list {
             list-style-type: none;
@@ -87,14 +81,12 @@
             margin-left: 10px;
         }
         @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
             .container {
+                margin: 10px;
                 padding: 15px;
             }
             h1 {
-                font-size: 1.5em;
+                font-size: 1.3em;
             }
             #new-item, #add-item {
                 width: 100%;
@@ -105,13 +97,14 @@
     </style>
 </head>
 <body>
-    <h1>רשימת הקניות של אביתר</h1>
-     <div class="container">
+    <div class="container">
         <h1>רשימת הקניות של אביתר</h1>
         <div>
             <input type="text" id="new-item" placeholder="הוסף פריט חדש">
             <button id="add-item">הוסף</button>
         </div>
+        <ul id="shopping-list"></ul>
+    </div>
         <ul id="shopping-list"></ul>
     </div>
     <ul id="shopping-list"></ul>
