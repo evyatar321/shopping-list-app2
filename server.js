@@ -1,62 +1,70 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// התחברות ל-MongoDB
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('מחובר ל-MongoDB'))
+  .catch(err => {
+    console.error('שגיאה בהתחברות ל-MongoDB:', err.message);
+    process.exit(1);
+  });
 
-// הגדרת סכמה עבור פריט
 const itemSchema = new mongoose.Schema({
-    text: String,
-    emoji: String
+  text: String,
+  emoji: String
 });
 
 const Item = mongoose.model('Item', itemSchema);
 
-app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
 
-// נתיבי API
 app.get('/api/items', async (req, res) => {
-    try {
-        const items = await Item.find();
-        res.json(items);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+  console.log('קיבלתי בקשה לקבלת פריטים');
+  try {
+    const items = await Item.find();
+    console.log('נשלחים פריטים:', items);
+    res.json(items);
+  } catch (error) {
+    console.error('שגיאה בקבלת פריטים:', error);
+    res.status(500).json({ message: error.message });
+  }
 });
 
 app.post('/api/items', async (req, res) => {
-    const item = new Item({
-        text: req.body.text,
-        emoji: req.body.emoji
-    });
-
-    try {
-        const newItem = await item.save();
-        res.status(201).json(newItem);
-    } catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+  console.log('קיבלתי בקשה להוספת פריט:', req.body);
+  const item = new Item({
+    text: req.body.text,
+    emoji: req.body.emoji
+  });
+  try {
+    const newItem = await item.save();
+    console.log('פריט חדש נשמר:', newItem);
+    res.status(201).json(newItem);
+  } catch (error) {
+    console.error('שגיאה בשמירת פריט:', error);
+    res.status(400).json({ message: error.message });
+  }
 });
 
 app.delete('/api/items/:id', async (req, res) => {
-    try {
-        await Item.findByIdAndDelete(req.params.id);
-        res.json({ message: 'הפריט נמחק' });
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+  console.log('קיבלתי בקשה למחיקת פריט:', req.params.id);
+  try {
+    const deletedItem = await Item.findByIdAndDelete(req.params.id);
+    if (!deletedItem) {
+      return res.status(404).json({ message: 'פריט לא נמצא' });
     }
-});
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    console.log('פריט נמחק:', deletedItem);
+    res.json({ message: 'פריט נמחק', item: deletedItem });
+  } catch (error) {
+    console.error('שגיאה במחיקת פריט:', error);
+    res.status(500).json({ message: error.message });
+  }
 });
 
 app.listen(PORT, () => {
-    console.log(`השרת פועל בפורט ${PORT}`);
+  console.log(`השרת פועל בפורט ${PORT}`);
 });
