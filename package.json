@@ -1,0 +1,14 @@
+{
+  "name": "shopping-list-app",
+  "version": "1.0.0",
+  "description": "אפליקציית רשימת קניות פשוטה",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.12.3",
+    "body-parser": "^1.19.0"
+  }
+}
