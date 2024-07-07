@@ -10,13 +10,32 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
+            background-image: url('/images/grocery-background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: -1;
         }
         h1 {
             text-align: center;
+            color: #333;
         }
         #shopping-list {
             list-style-type: none;
             padding: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         #shopping-list li {
             display: flex;
@@ -34,10 +53,13 @@
             border: none;
             padding: 5px 10px;
             cursor: pointer;
+            border-radius: 5px;
         }
         #new-item {
             width: 70%;
             padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
         #add-item {
             width: 25%;
@@ -46,6 +68,7 @@
             color: white;
             border: none;
             cursor: pointer;
+            border-radius: 5px;
         }
         .item-content {
             display: flex;
