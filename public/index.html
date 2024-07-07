@@ -1,1 +1,123 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>רשימת הקניות של אביתר</title>
+    <style>
+        /* ... (הסגנונות הקיימים נשארים ללא שינוי) ... */
+    </style>
+</head>
+<body>
+    <h1>רשימת הקניות של אביתר</h1>
+    <div>
+        <input type="text" id="new-item" placeholder="הוסף פריט חדש">
+        <button id="add-item">הוסף</button>
+    </div>
+    <ul id="shopping-list"></ul>
 
+    <script>
+        const shoppingList = document.getElementById('shopping-list');
+        const newItemInput = document.getElementById('new-item');
+        const addItemButton = document.getElementById('add-item');
+
+        const itemToEmojiMap = {
+            // ... (מיפוי האימוג'ים הקיים נשאר ללא שינוי) ...
+        };
+
+        function getItemEmoji(itemName) {
+            // ... (הפונקציה הקיימת נשארת ללא שינוי) ...
+        }
+
+        function createItemElement(item) {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="item-content">
+                    <span class="item-icon">${item.emoji}</span>
+                    <span class="item-text">${item.text}</span>
+                </div>
+                <button class="delete-btn">מחק</button>
+            `;
+            li.querySelector('.delete-btn').addEventListener('click', function() {
+                deleteItem(item._id);
+            });
+            return li;
+        }
+
+        async function addItem(itemText) {
+            if (itemText) {
+                const item = {
+                    text: itemText,
+                    emoji: getItemEmoji(itemText)
+                };
+                try {
+                    const response = await fetch('/api/items', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(item),
+                    });
+                    if (response.ok) {
+                        const newItem = await response.json();
+                        const li = createItemElement(newItem);
+                        shoppingList.appendChild(li);
+                    } else {
+                        console.error('נכשל בהוספת פריט');
+                    }
+                } catch (error) {
+                    console.error('שגיאה:', error);
+                }
+            }
+        }
+
+        async function deleteItem(itemId) {
+            try {
+                const response = await fetch(`/api/items/${itemId}`, {
+                    method: 'DELETE',
+                });
+                if (response.ok) {
+                    loadList();
+                } else {
+                    console.error('נכשל במחיקת פריט');
+                }
+            } catch (error) {
+                console.error('שגיאה:', error);
+            }
+        }
+
+        async function loadList() {
+            try {
+                const response = await fetch('/api/items');
+                if (response.ok) {
+                    const items = await response.json();
+                    shoppingList.innerHTML = '';
+                    items.forEach(item => {
+                        const li = createItemElement(item);
+                        shoppingList.appendChild(li);
+                    });
+                } else {
+                    console.error('נכשל בטעינת פריטים');
+                }
+            } catch (error) {
+                console.error('שגיאה:', error);
+            }
+        }
+
+        addItemButton.addEventListener('click', () => {
+            addItem(newItemInput.value.trim());
+            newItemInput.value = '';
+        });
+
+        newItemInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addItem(newItemInput.value.trim());
+                newItemInput.value = '';
+            }
+        });
+
+        // טען את הרשימה בעת טעינת הדף
+        loadList();
+    </script>
+</body>
+</html>
