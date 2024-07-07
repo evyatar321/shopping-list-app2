@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>רשימת הקניות של אביתר</title>
-    <style>
+     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -22,7 +22,7 @@
             width: 100%;
             max-width: 600px;
             margin: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.6); /* שקיפות חזקה יותר */
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -56,16 +56,22 @@
             cursor: pointer;
             border-radius: 5px;
         }
+        .input-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
         #new-item {
-            width: calc(70% - 10px);
+            flex: 1;
+            min-width: 200px;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            margin-right: 10px;
         }
         #add-item {
-            width: 30%;
-            padding: 10px;
+            padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -88,10 +94,12 @@
             h1 {
                 font-size: 1.3em;
             }
+            .input-container {
+                flex-direction: column;
+            }
             #new-item, #add-item {
                 width: 100%;
-                margin-right: 0;
-                margin-bottom: 10px;
+                min-width: 0;
             }
         }
     </style>
@@ -99,14 +107,14 @@
 <body>
     <div class="container">
         <h1>רשימת הקניות של אביתר</h1>
-        <div>
-            <input type="text" id="new-item" placeholder="הוסף פריט חדש">
-            <button id="add-item">הוסף</button>
-        </div>
-        <ul id="shopping-list"></ul>
+        <div class="container">
+    <h1>רשימת הקניות של אביתר</h1>
+    <div class="input-container">
+        <input type="text" id="new-item" placeholder="הוסף פריט חדש">
+        <button id="add-item">הוסף</button>
     </div>
-        <ul id="shopping-list"></ul>
-    </div>
+    <ul id="shopping-list"></ul>
+</div>
     <ul id="shopping-list"></ul>
 
     <script>
