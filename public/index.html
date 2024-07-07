@@ -5,7 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>רשימת הקניות של אביתר</title>
     <style>
-        /* ... (הסגנונות הקיימים נשארים ללא שינוי) ... */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        #shopping-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        #shopping-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        #shopping-list li:last-child {
+            border-bottom: none;
+        }
+        .delete-btn {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        #new-item {
+            width: 70%;
+            padding: 10px;
+        }
+        #add-item {
+            width: 25%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .item-content {
+            display: flex;
+            align-items: center;
+        }
+        .item-icon {
+            font-size: 1.5em;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -22,11 +71,23 @@
         const addItemButton = document.getElementById('add-item');
 
         const itemToEmojiMap = {
-            // ... (מיפוי האימוג'ים הקיים נשאר ללא שינוי) ...
+            'בצל': '🧅', 'שום': '🧄', 'אפונה': '🛒', 'ממתק': '🍬',
+            'חלב': '🥛', 'לחם': '🍞', 'ביצים': '🥚', 'גבינה': '🧀', 'עגבניות': '🍅',
+            'מלפפונים': '🥒', 'תפוחים': '🍎', 'בננות': '🍌', 'בשר': '🥩', 'עוף': '🍗',
+            'דגים': '🐟', 'אורז': '🍚', 'פסטה': '🍝', 'קמח': '🌾', 'סוכר': '🍬',
+            'שמן': '🫙', 'מים': '💧', 'יין': '🍷', 'בירה': '🍺', 'קפה': '☕',
+            'תה': '🍵', 'פלפל': '🌶️', 'מלח': '🧂', 'לימון': '🍋', 'תפוז': '🍊',
+            'אבטיח': '🍉', 'ענבים': '🍇', 'תות': '🍓', 'אבוקדו': '🥑'
         };
 
         function getItemEmoji(itemName) {
-            // ... (הפונקציה הקיימת נשארת ללא שינוי) ...
+            const lowercaseItem = itemName.toLowerCase();
+            for (const [key, value] of Object.entries(itemToEmojiMap)) {
+                if (lowercaseItem.includes(key)) {
+                    return value;
+                }
+            }
+            return '🛒';
         }
 
         function createItemElement(item) {
@@ -62,8 +123,9 @@
                         const newItem = await response.json();
                         const li = createItemElement(newItem);
                         shoppingList.appendChild(li);
+                        console.log('פריט חדש נוסף:', newItem);
                     } else {
-                        console.error('נכשל בהוספת פריט');
+                        console.error('נכשל בהוספת פריט:', await response.text());
                     }
                 } catch (error) {
                     console.error('שגיאה:', error);
@@ -77,9 +139,11 @@
                     method: 'DELETE',
                 });
                 if (response.ok) {
+                    const result = await response.json();
+                    console.log('פריט נמחק:', result);
                     loadList();
                 } else {
-                    console.error('נכשל במחיקת פריט');
+                    console.error('נכשל במחיקת פריט:', await response.text());
                 }
             } catch (error) {
                 console.error('שגיאה:', error);
@@ -91,13 +155,14 @@
                 const response = await fetch('/api/items');
                 if (response.ok) {
                     const items = await response.json();
+                    console.log('פריטים שהתקבלו:', items);
                     shoppingList.innerHTML = '';
                     items.forEach(item => {
                         const li = createItemElement(item);
                         shoppingList.appendChild(li);
                     });
                 } else {
-                    console.error('נכשל בטעינת פריטים');
+                    console.error('נכשל בטעינת פריטים:', await response.text());
                 }
             } catch (error) {
                 console.error('שגיאה:', error);
