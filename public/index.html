@@ -7,18 +7,18 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
+            margin: 0;
             padding: 20px;
             background-image: url('grocery-background.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             position: relative;
+            min-height: 100vh;
         }
         body::before {
             content: "";
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
@@ -26,16 +26,23 @@
             background-color: rgba(255, 255, 255, 0.8);
             z-index: -1;
         }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
         h1 {
             text-align: center;
             color: #333;
+            font-size: 1.8em; /* מוקטן מעט */
+            margin-bottom: 20px;
         }
         #shopping-list {
             list-style-type: none;
             padding: 0;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         #shopping-list li {
             display: flex;
@@ -56,13 +63,14 @@
             border-radius: 5px;
         }
         #new-item {
-            width: 70%;
+            width: calc(70% - 10px);
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            margin-right: 10px;
         }
         #add-item {
-            width: 25%;
+            width: 30%;
             padding: 10px;
             background-color: #4CAF50;
             color: white;
@@ -78,13 +86,33 @@
             font-size: 1.5em;
             margin-left: 10px;
         }
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            #new-item, #add-item {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
     </style>
 </head>
 <body>
     <h1>רשימת הקניות של אביתר</h1>
-    <div>
-        <input type="text" id="new-item" placeholder="הוסף פריט חדש">
-        <button id="add-item">הוסף</button>
+     <div class="container">
+        <h1>רשימת הקניות של אביתר</h1>
+        <div>
+            <input type="text" id="new-item" placeholder="הוסף פריט חדש">
+            <button id="add-item">הוסף</button>
+        </div>
+        <ul id="shopping-list"></ul>
     </div>
     <ul id="shopping-list"></ul>
 
